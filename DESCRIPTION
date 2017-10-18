@@ -1,0 +1,18 @@
+Package: clouds
+Type: Package
+Title: clouds - non-parametric clustering for groups of numeric data (ECDFs)
+Version: 0.0.1
+Authors@R: as.person(c(
+    "Julian Cruz <cruz.julian.mauricio@gmail.com> [aut]",
+    "Daniel Moreno <damorenoco@unal.edu.co> [aut, cre]"
+  ))
+Maintainer: Daniel Moreno <damorenoco@unal.edu.co>
+Description: clouds implements non-parametric clustering algorithims for groups 
+    of numeric data based on a pseudo-distance between empircal cumulative 
+    distribution function (ECDF) can be computed.
+URL: https://github.com/nebulae-co/clouds
+License: MIT + file LICENSE
+LinkingTo: Rcpp
+Imports: Rcpp
+Encoding: UTF-8
+RoxygenNote: 6.0.1

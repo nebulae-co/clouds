@@ -1,0 +1,92 @@
+---
+output:
+  md_document:
+    variant: markdown_github
+---
+
+```{r setup, echo = FALSE}
+library("knitr")
+
+opts_chunk$set(fig.align  = "center",
+               fig.path   = "README/",
+               cache.path = "README/cache/",
+               comment    = "#>",
+               warning    = FALSE,
+               message    = FALSE)
+```
+
+<!-- README.md is generated from README.rmd. Please edit that file -->
+
+# clouds
+
+clouds is a package that implements non-parametric clustering algorithims
+for groups of numeric data. A cloud is a numerical vector with a weight vector 
+associated from which an empircal cumulative distribution function (ECDF) can be
+computed.
+
+clouds defines a pseudo-distance function to compare ECDFs. So given a set of 
+clouds -- e.g. an experiment with a response variable and treatment groups, 
+where each group will define a cloud -- a distance matrix for the clouds can be
+computed. Based on this matrix we can apply different well-known clustering 
+methods to group the clouds.
+
+Currently there are two methods implemented `k_clouds` which uses k-means for 
+the clustering and `j_clouds` which uses Ward's hierarchichal algorithm as 
+implemented in `stats::hclust()` with `method = "ward.D"`.
+
+### Installation
+
+Install from GitHub with `devtools`:
+
+```
+devtools::install_github("nebulae-co/clouds")
+```
+
+### Usage
+
+Lets make some data from five different normal distributions:
+
+```{r data}
+library("dplyr")
+
+n_distributions <- 5L
+n_groups <- 4L
+group_size <- 12
+N <- group_size * n_groups
+distributions <- letters[1:n_distributions]
+groups <- LETTERS[1:(n_distributions * n_groups)]
+
+mean <- 1:5
+sd <- c(2, 1, 0.5, 1, 2)
+
+sample <- data_frame(
+  y = c(mapply(rnorm, mean = mean, sd = sd, MoreArgs = list(n = N))),
+  distribution = rep(distributions, each = N),
+  group = rep(groups, each = group_size))
+
+sample
+```
+
+Now lets load `clouds` and get the `k_clouds` clusters:
+
+```{r k_clouds}
+library("clouds")
+
+sample %>%
+  k_clouds(var = "y", group = "group", k = 5, threshold = 0.01)
+```
+
+Compare with the `j_clouds` clusters:
+```{r j_clouds}
+sample %>%
+  j_clouds(var = "y", group = "group", k = 5)
+```
+
+### About
+
+This is mostly result of [Julian](https://github.com/CruzJulian)'s research for
+his [Master Thesis](https://github.com/CruzJulian/Tesis).
+
+[Daniel](https://github.com/demorenoc) has done the packaging.
+
+Still a work in progress.
